@@ -10,11 +10,11 @@ class Time(object):
     self.minutes = minutes
     self.hours = hours
 
-  def print_time(self):
+  def __str__(self):
     """Prints a time in the form of hour:minute:second"""
-    print '%.2d:%.2d:%.2d' % (self.hours, self.minutes, self.seconds)
+    return '%.2d:%.2d:%.2d' % (self.hours, self.minutes, self.seconds)
 
-  def time_to_int(self):
+  def to_int(self):
     """Converts times to integers.
 
     Returns:
@@ -24,7 +24,7 @@ class Time(object):
     seconds = minutes * 60 + self.seconds
     return seconds
 
-  def int_to_time(self, seconds):
+  def from_int(self, seconds):
     """Converts ints to times.
 
     Args:
@@ -40,15 +40,15 @@ class Time(object):
     Args:
       seconds: (int) number of seconds to increment by
     """
-    current = self.time_to_int()
+    current = self.to_int()
     new = current + seconds
-    self.int_to_time(new)
+    self.from_int(new)
 
   def __add__(self, other):
     """Adds two time objects by calling either add_time or increment.
 
     Args:
-      other: Time object
+      other: (object) Time
     """
     if isinstance(other, Time):
       self.add_time(other)
@@ -62,13 +62,11 @@ class Time(object):
     Args:
       other: Time object
     """
-    first = self.time_to_int()
-    print 'first is %s' % first
-    second = other.time_to_int()
-    print 'second is %s' % second
-    seconds = first + second
-    self.int_to_time(seconds)
-    self.print_time()
+    first = self.to_int()
+    second = other.to_int()
+    total = first + second
+    self.from_int(total)
+    print str(self) # Debug
 
 #  def __radd__(self, other):
 #    """Adds two time objects by implementing a right hand add for Time objects.
@@ -87,26 +85,17 @@ class Time(object):
     Returns:
       (int) -1 if other is greater, 0 if equal, 1 otherwise.
     """
-    if self.hours > other.hours:
-        return 1
-    elif self.hours < other.hours:
-        return -1
-    elif self.minutes > other.minutes:
-        return 1
-    elif self.minutes < other.minutes:
-        return -1
-    elif self.seconds > other.seconds:
-        return 1
-    elif self.seconds < other.seconds:
-        return -1
-    return 0
+    return cmp(self.to_int(), other.to_int())
 
 a = Time(1, 0, 2)
 b = Time(2, 0, 0)
 c = Time(1, 0, 1)
-print a.__cmp__(b)
-print a.__cmp__(a)
-print a.__cmp__(c)
+a+b
+str(a)
+a + 1
+print str(a)
+1 + a
+print str(a)
 
 
 
