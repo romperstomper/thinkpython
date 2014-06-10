@@ -10,11 +10,15 @@ class Time(object):
     self.minutes = minutes
     self.hours = hours
 
-  def print_time(self):
-    """Prints a time in the form of hour:minute:second"""
-    print '%.2d:%.2d:%.2d' % (self.hours, self.minutes, self.seconds)
+  def __str__(self):
+    """Prints a time in the form of hour:minute:second.
 
-  def time_to_int(self):
+    Returns:
+      (str) representation of the Time object
+    """
+    return '%.2d:%.2d:%.2d' % (self.hours, self.minutes, self.seconds)
+
+  def to_int(self):
     """Converts times to integers.
 
     Returns:
@@ -24,7 +28,7 @@ class Time(object):
     seconds = minutes * 60 + self.seconds
     return seconds
 
-  def int_to_time(self, seconds):
+  def from_int(self, seconds):
     """Converts ints to times.
 
     Args:
@@ -40,20 +44,21 @@ class Time(object):
     Args:
       seconds: (int) number of seconds to increment by
     """
-    current = self.time_to_int()
+    current = self.to_int()
     new = current + seconds
-    self.int_to_time(new)
+    self.from_int(new)
 
   def __add__(self, other):
     """Adds two time objects by calling either add_time or increment.
 
     Args:
-      other: Time object
+      other: Time (object) or (int)
     """
     if isinstance(other, Time):
-      self.add_time(other)
+      totaltime = self.add_time(other)
     else:
       self.increment(other)
+    return str(totaltime)
 
   def add_time(self, other):
     """Adds two time objects by converting them to ints, then sum the ints and
@@ -62,21 +67,20 @@ class Time(object):
     Args:
       other: Time object
     """
-    first = self.time_to_int()
-    print 'first is %s' % first
-    second = other.time_to_int()
-    print 'second is %s' % second
-    seconds = first + second
-    self.int_to_time(seconds)
-    self.print_time()
+    newtime = Time()
+    first = self.to_int()
+    second = other.to_int()
+    total = first + second
+    newtime.from_int(total)
+    return newtime
 
-#  def __radd__(self, other):
-#    """Adds two time objects by implementing a right hand add for Time objects.
-#
-#    Args:
-#      other: Time object
-#    """
-#    return self.__add__(other)
+  def __radd__(self, other):
+    """Adds two time objects by implementing a right hand add for Time objects.
+
+    Args:
+      other: (object) Time
+    """
+    return self.__add__(other)
 
   def __cmp__(self, other):
     """Compares two time objects value.
@@ -87,19 +91,10 @@ class Time(object):
     Returns:
       (int) -1 if other is greater, 0 if equal, 1 otherwise.
     """
-    if self.hours > other.hours:
-        return 1
-    elif self.hours < other.hours:
-        return -1
-    elif self.minutes > other.minutes:
-        return 1
-    elif self.minutes < other.minutes:
-        return -1
-    elif self.seconds > other.seconds:
-        return 1
-    elif self.seconds < other.seconds:
-        return -1
-    return 0
+    t1 = (self.hours, self.minutes, self.seconds)
+    t2 = (other.hours, other.minutes, other.seconds)
+    return cmp(t1, t2)
+
 
 a = Time(1, 0, 2)
 b = Time(2, 0, 0)
