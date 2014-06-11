@@ -11,11 +11,7 @@ class Time(object):
     self.hours = hours
 
   def __str__(self):
-    """Prints a time in the form of hour:minute:second.
-
-    Returns:
-      (str) representation of the Time object
-    """
+    """Prints a time in the form of hour:minute:second"""
     return '%.2d:%.2d:%.2d' % (self.hours, self.minutes, self.seconds)
 
   def to_int(self):
@@ -52,13 +48,12 @@ class Time(object):
     """Adds two time objects by calling either add_time or increment.
 
     Args:
-      other: Time (object) or (int)
+      other: (object) Time
     """
     if isinstance(other, Time):
-      totaltime = self.add_time(other)
+      self.add_time(other)
     else:
       self.increment(other)
-    return str(totaltime)
 
   def add_time(self, other):
     """Adds two time objects by converting them to ints, then sum the ints and
@@ -67,20 +62,19 @@ class Time(object):
     Args:
       other: Time object
     """
-    newtime = Time()
     first = self.to_int()
     second = other.to_int()
     total = first + second
-    newtime.from_int(total)
-    return newtime
+    self.from_int(total)
+    print str(self) # Debug
 
-  def __radd__(self, other):
-    """Adds two time objects by implementing a right hand add for Time objects.
-
-    Args:
-      other: (object) Time
-    """
-    return self.__add__(other)
+#  def __radd__(self, other):
+#    """Adds two time objects by implementing a right hand add for Time objects.
+#
+#    Args:
+#      other: Time object
+#    """
+#    return self.__add__(other)
 
   def __cmp__(self, other):
     """Compares two time objects value.
@@ -91,17 +85,17 @@ class Time(object):
     Returns:
       (int) -1 if other is greater, 0 if equal, 1 otherwise.
     """
-    t1 = (self.hours, self.minutes, self.seconds)
-    t2 = (other.hours, other.minutes, other.seconds)
-    return cmp(t1, t2)
-
+    return cmp(self.to_int(), other.to_int())
 
 a = Time(1, 0, 2)
 b = Time(2, 0, 0)
 c = Time(1, 0, 1)
-print a.__cmp__(b)
-print a.__cmp__(a)
-print a.__cmp__(c)
+a+b
+str(a)
+a + 1
+print str(a)
+1 + a
+print str(a)
 
 
 
