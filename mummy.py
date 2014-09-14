@@ -22,7 +22,8 @@ def main():
   try:
     mummy = sys.argv[1].upper()
   except IndexError:
-    'print you must supply todays mummy'
+    print 'you must supply todays mummy'
+    return
   start = dt.datetime.now()
   end = dt.timedelta(days=60)+start
   while start <= end:
